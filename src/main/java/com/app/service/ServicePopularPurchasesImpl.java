@@ -19,19 +19,12 @@ public class ServicePopularPurchasesImpl implements ServicePopularPurchases {
 	@Autowired
 	private ServicePurchasesByUser userService;
 	@Autowired
-	private ServiceProducts serviceProduct;
-	@Autowired
 	private ScrapingInterface scraping;
 
 	@Override
 	@Cacheable("popular")
 	public ArrayList<PopularPurchases> popular() {
-		System.out.println("POPULAR========================");
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			System.out.println(" catch (InterruptedException e)");
-		}
+		
 		List<Product> products = scraping.getAllProducts();
 
 		ArrayList<PopularPurchases> popularList = new ArrayList<>();

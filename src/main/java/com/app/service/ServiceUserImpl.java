@@ -7,27 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.app.entity.User;
 import com.app.scraping.ScrapingImpl;
- 
 
 @Service
 public class ServiceUserImpl implements ServiceUser {
-	  
-	 
+
 	@Autowired
 	private ScrapingImpl scraping;
 
 	@Override
-	
 	public List<User> getUsers() {
 
 		List<User> usersList = getFromJSONUserList();
-
 		return usersList;
 	}
-	
-	
-	private List<User> getFromJSONUserList( ) {
-		
+
+	private List<User> getFromJSONUserList() {
+
 		List<User> usersList = new ArrayList<>();
 		String textObj = scraping.getTextUser();
 		JSONObject obj;
@@ -49,6 +44,7 @@ public class ServiceUserImpl implements ServiceUser {
 		}
 		return usersList;
 	}
+
 	@Override
 	public List<String> getUserName() {
 		List<String> names = new ArrayList<>();
@@ -57,9 +53,5 @@ public class ServiceUserImpl implements ServiceUser {
 			names.add(user.getUsername());
 		}
 		return names;
-	}}
-                                                              
-
- 
-
-	
+	}
+}

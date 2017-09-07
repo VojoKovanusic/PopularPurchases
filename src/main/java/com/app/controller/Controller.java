@@ -32,14 +32,10 @@ public class Controller {
 	@Autowired
 	private ServicePopularPurchases popularService;
 	@Autowired
-
 	private ServiceOtherUsersWhoRecentlyPurchased service;
 	
-
-
 	@RequestMapping(path = "/api/recent_purchases/{username:.+}", method = RequestMethod.GET)
 	public String recentPurchasesByUsername(@PathVariable String username) {
-		
 		
 		if (service.usersWhoRecentlyPurchased(username).isEmpty()) {
 			return "Try with another user, \"" + username + "\" did not buy anything.";

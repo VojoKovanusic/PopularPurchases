@@ -47,7 +47,6 @@ public class ScrapingImpl implements ScrapingInterface  {
 	
 	
 	@Override
-
 	public String getTextUser()  {
 		String result="";
          String addres = "http://localhost:8000/api/users";

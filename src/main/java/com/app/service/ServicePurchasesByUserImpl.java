@@ -54,15 +54,12 @@ public class ServicePurchasesByUserImpl implements ServicePurchasesByUser {
 	@Override
 	@Cacheable(value="purchasesByUsername", key="#username")
 	public  ArrayList<Purchas> getPurchasesByUsername(String username) {
-		System.out.println("firist time getPurchasesByUsername##################################");
-		//for cache test 
+		
+		System.out.println("*************Test cache*******getPurchasesByUsername(String username)");
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			 
-			
-			e.printStackTrace();
-		}
+		}	
 		ArrayList<Purchas> listpurchase = new ArrayList<>();
 
 		for (Purchas purchas : getAllPurchases()) {
