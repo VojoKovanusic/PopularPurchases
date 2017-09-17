@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.app.entity.PopularPurchases;
 import com.app.entity.Product;
-import com.app.entity.Purchas;
 import com.app.entity.User;
 import com.app.service.ServiceOtherUsersWhoRecentlyPurchased;
 import com.app.service.ServicePopularPurchases;
@@ -33,17 +32,8 @@ public class Controller {
 	private ServicePopularPurchases popularService;
 	@Autowired
 	private ServiceOtherUsersWhoRecentlyPurchased service;
-	
-	@RequestMapping(path = "/api/recent_purchases/{username:.+}", method = RequestMethod.GET)
-	public String recentPurchasesByUsername(@PathVariable String username) {
-		
-		if (service.usersWhoRecentlyPurchased(username).isEmpty()) {
-			return "Try with another user, \"" + username + "\" did not buy anything.";
-		}
 
-		return "{ \"purchases\":"+service.usersWhoRecentlyPurchased(username).toString()+"}";
-	}
-
+	// fetch 5 recent purchases for the user
 	@RequestMapping(path = "api/purchases/by_user/{username:.+}", method = RequestMethod.GET)
 	public String allPurchases(@PathVariable String username) {
 
@@ -51,14 +41,15 @@ public class Controller {
 
 		if (listpurchase.isEmpty())
 			return "User with username of '{{" + username + "}}' was not found";
-		return "{ \"usernames\":"+listpurchase.toString()+"}";
-		
+		return "{\"purchasesByUser\":" + listpurchase.toString() + "}";
+
 	}
 
+	// list of all people who previously purchased that product
 	@RequestMapping(path = "api/purchases/by_product/{product_id}", method = RequestMethod.GET)
 	public String peopleWhoPreviouslyPurchasedProduct(@PathVariable String product_id) {
-		//nisam uspio sa Exceptionima uhvatiti ilegalan unos...pa sam pjeske
-		if (validation(product_id))
+		// nisam uspio sa Exceptionima uhvatiti ilegalan unos...pa sam pjeske
+		if (isNumber(product_id))
 			return "Entered  id'{{" + product_id + "}}' was not found, because is not in number format";
 
 		int id = Integer.parseInt(product_id);
@@ -66,21 +57,39 @@ public class Controller {
 		List<String> listpurchase = purchasesByProduct.peopleWhoPreviouslyPurchasedProduct(id);
 		if (listpurchase.isEmpty())
 			return "Purchase with  product id'{{" + id + "}}' was not found";
-		return "{ \"products\":"+listpurchase.toString()+"}";
+		return "{\"purchasesByProductId\":" + listpurchase.toString() + "}";
 
 	}
 
-	@RequestMapping(path = "api/products/{stringId}", method = RequestMethod.GET)
-	public String getProductByID(@PathVariable String stringId) {
-		
-		//nisam uspio sa Exceptionima uhvatiti ilegalan unos...pa sam pjeske
-		if (validation(stringId))
-			return "Entered  id'{{" + stringId + "}}' was not found, because is not in number format ";
-		
-		int id = Integer.parseInt(stringId);
-		
-		return serviceProduct.getProduct(id);
+	// info about the products
+	@RequestMapping(path = "api/products/{product_id}", method = RequestMethod.GET)
+	public String getProductByID(@PathVariable String product_id) {
 
+		// nisam uspio sa Exceptionima uhvatiti ilegalan unos...pa sam pjeske
+		if (isNumber(product_id))
+			return "Entered  id'{{" + product_id + "}}' was not found, because is not in number format ";
+
+		int id = Integer.parseInt(product_id);
+
+		return "{\"product\":" + serviceProduct.getProduct(id) + "}";
+
+	}
+	// popular products
+	@RequestMapping("api/popular")
+	public  String popular() {
+		return "{\"product\":" + popularService.popularJson().toString()+ "}";
+	}
+
+	//Pomocni controlleri:
+	
+	@RequestMapping(path = "/api/recent_purchases/{username:.+}", method = RequestMethod.GET)
+	public String recentPurchasesByUsername(@PathVariable String username) {
+
+		if (service.usersWhoRecentlyPurchased(username).isEmpty()) {
+			return "Try with another user, \"" + username + "\" did not buy anything.";
+		}
+
+		return "{\"recentPurchases\":" + service.usersWhoRecentlyPurchased(username).toString() + "}";
 	}
 
 	// testini kontroleri:
@@ -89,28 +98,10 @@ public class Controller {
 		return serviceUser.getUsers();
 
 	}
-	@RequestMapping("/test")
-	public String test() {
-		return "serviceUser.getUsers()";
 
-	}
 
-	@RequestMapping("api/products")
-	public List<Product> getAllProducts() {
-//nije dobar poziv metode....
-		return  getAllProducts();
-
-	}
-
-	// for test
-	@RequestMapping("popular")
-	public ArrayList<PopularPurchases> popular() {
-		return  popularService.popular();
-	}
-	
-	
-	private boolean validation(String string) {
-		char ch[] = string.toCharArray();
+	private boolean isNumber(String id) {
+		char ch[] = id.toCharArray();
 		for (char c : ch) {
 			if (!Character.isDigit(c))
 				return true;

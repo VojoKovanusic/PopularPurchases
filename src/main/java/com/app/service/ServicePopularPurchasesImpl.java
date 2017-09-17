@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.app.entity.PopularPurchases;
 import com.app.entity.Product;
 import com.app.entity.Purchas;
+import com.app.json.JsonUtil;
 import com.app.scraping.ScrapingInterface;
 
 @Component
@@ -22,7 +23,7 @@ public class ServicePopularPurchasesImpl implements ServicePopularPurchases {
 	private ScrapingInterface scraping;
 
 	@Override
-	@Cacheable("popular")
+	//@Cacheable("popular")
 	public ArrayList<PopularPurchases> popular() {
 		
 		List<Product> products = scraping.getAllProducts();
@@ -44,9 +45,26 @@ public class ServicePopularPurchasesImpl implements ServicePopularPurchases {
 		Collections.sort(popularList);
 		return popularList;
 	}
+	
+	private ArrayList<String> convertJavaObjectToJson(ArrayList<PopularPurchases> list) {
+		ArrayList<String> jsonList = new ArrayList<>();
+		for (PopularPurchases purchas : list) {
+			String jsonFormat = JsonUtil.convertJavaToJSON(purchas);
+			jsonList.add(jsonFormat);
+		}
+		return jsonList;
+	}
+	
 
+	@Override
+	@Cacheable("popular")
+	public String popularJson() {
+		ArrayList<PopularPurchases> popularJson = popular();
+		
+		return convertJavaObjectToJson(popularJson).toString();
+	}
 	@CacheEvict("popular")
 	public void cacheEvictAccounts() {
-
+		
 	}
 }
