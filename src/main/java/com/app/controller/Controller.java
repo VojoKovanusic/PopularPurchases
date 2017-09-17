@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import com.app.entity.PopularPurchases;
-import com.app.entity.Product;
 import com.app.entity.User;
 import com.app.service.ServiceOtherUsersWhoRecentlyPurchased;
 import com.app.service.ServicePopularPurchases;
@@ -81,7 +79,7 @@ public class Controller {
 	}
 
 	//Pomocni controlleri:
-	
+
 	@RequestMapping(path = "/api/recent_purchases/{username:.+}", method = RequestMethod.GET)
 	public String recentPurchasesByUsername(@PathVariable String username) {
 
@@ -99,7 +97,7 @@ public class Controller {
 
 	}
 
-
+//validacija unosa
 	private boolean isNumber(String id) {
 		char ch[] = id.toCharArray();
 		for (char c : ch) {
