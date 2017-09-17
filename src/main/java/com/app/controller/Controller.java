@@ -24,7 +24,7 @@ public class Controller {
 	@Autowired
 	private ServicePurchasesByUser servicePurchasesByUser;
 	@Autowired
-	private ServicePurchaBbyProduct purchasesBbyProduct;
+	private ServicePurchaBbyProduct purchasesByProduct;
 	@Autowired
 	private ServiceUser serviceUser;
 	@Autowired
@@ -41,17 +41,17 @@ public class Controller {
 			return "Try with another user, \"" + username + "\" did not buy anything.";
 		}
 
-		return username + " buy this products: " + service.usersWhoRecentlyPurchased(username).toString();
+		return "{ \"purchases\":"+service.usersWhoRecentlyPurchased(username).toString()+"}";
 	}
 
 	@RequestMapping(path = "api/purchases/by_user/{username:.+}", method = RequestMethod.GET)
 	public String allPurchases(@PathVariable String username) {
 
-		ArrayList<Purchas> listpurchase = servicePurchasesByUser.getPurchasesByUsername(username);
+		ArrayList<String> listpurchase = servicePurchasesByUser.getPurchasesByUsername(username);
 
 		if (listpurchase.isEmpty())
 			return "User with username of '{{" + username + "}}' was not found";
-		return listpurchase.toString();
+		return "{ \"usernames\":"+listpurchase.toString()+"}";
 		
 	}
 
@@ -63,14 +63,12 @@ public class Controller {
 
 		int id = Integer.parseInt(product_id);
 
-		List<Purchas> listpurchase = purchasesBbyProduct.peopleWhoPreviouslyPurchasedProduct(id);
+		List<String> listpurchase = purchasesByProduct.peopleWhoPreviouslyPurchasedProduct(id);
 		if (listpurchase.isEmpty())
 			return "Purchase with  product id'{{" + id + "}}' was not found";
-		return listpurchase.toString();
+		return "{ \"products\":"+listpurchase.toString()+"}";
 
 	}
-
-	
 
 	@RequestMapping(path = "api/products/{stringId}", method = RequestMethod.GET)
 	public String getProductByID(@PathVariable String stringId) {
@@ -91,7 +89,7 @@ public class Controller {
 		return serviceUser.getUsers();
 
 	}
-	@RequestMapping("test")
+	@RequestMapping("/test")
 	public String test() {
 		return "serviceUser.getUsers()";
 

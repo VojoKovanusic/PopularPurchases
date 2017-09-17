@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import com.app.entity.PopularPurchases;
+import com.app.json.JsonUtil;
 
 @Component
 public class ServiceOtherUsersWhoRecentlyPurchased {
@@ -14,7 +15,7 @@ public class ServiceOtherUsersWhoRecentlyPurchased {
 	private ServicePopularPurchases popularService;
 
 	@Cacheable(value = "popularP", key = "#username")
-	public ArrayList<PopularPurchases> usersWhoRecentlyPurchased(String username) {
+	public ArrayList<String> usersWhoRecentlyPurchased(String username) {
 		System.out.println("*************Test cache*******usersWhoRecentlyPurchased");
 		try {
 			Thread.sleep(2000);
@@ -22,20 +23,21 @@ public class ServiceOtherUsersWhoRecentlyPurchased {
 		}
 		ArrayList<PopularPurchases> all = popularService.popular();
 
-		ArrayList<PopularPurchases> sameProduct = new ArrayList<>();
+		ArrayList<String> sameProduct = new ArrayList<>();
 
 		for (PopularPurchases objFromAll : all) {
 
-			if (isContainsUsernameBy(objFromAll.getRecent(), username)) {
+			if (isContainsUsername(objFromAll.getRecent(), username)) {
 				objFromAll.getRecent().remove(username);
-				sameProduct.add(objFromAll);
+				
+				sameProduct.add(JsonUtil.convertJavaToJSON(objFromAll));
 			}
 		}
 		return sameProduct;
 
 	}
 
-	private boolean isContainsUsernameBy(ArrayList<String> names, String username) {
+	private boolean isContainsUsername(ArrayList<String> names, String username) {
 
 		for (String name : names) {
 			if (name.equals(username))

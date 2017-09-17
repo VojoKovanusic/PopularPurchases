@@ -6,6 +6,6 @@ import com.app.entity.Purchas;
 
 public interface ServicePurchaBbyProduct {
 
-	List<Purchas> peopleWhoPreviouslyPurchasedProduct(int productId);
+	List<String> peopleWhoPreviouslyPurchasedProduct(int productId);
 
 }

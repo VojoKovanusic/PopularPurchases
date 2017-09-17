@@ -11,6 +11,6 @@ public interface ServicePurchasesByUser {
 	ArrayList<Purchas> getFiveRecentPurchases(ArrayList<Purchas> list);	
 	public List<Purchas>  getAllPurchases();
  
-	public ArrayList<Purchas> getPurchasesByUsername(String username);
+	public ArrayList<String> getPurchasesByUsername(String username);
 	 
 }
