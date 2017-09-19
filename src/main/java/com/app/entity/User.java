@@ -1,6 +1,8 @@
 package com.app.entity;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
 
 	private String username;
 	private String email;
@@ -18,7 +20,7 @@ public class User {
 	}
 
 	public User() {
-		// TODO Auto-generated constructor stub
+		 
 	}
 
 	public String getUsername() {
@@ -35,6 +37,11 @@ public class User {
 
 	public void setMail(String mail) {
 		this.email = mail;
+	}
+
+	@Override
+	public String toString() {
+		return "User [username=" + username + ", email=" + email + "]";
 	}
 
 }

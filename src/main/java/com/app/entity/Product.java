@@ -1,8 +1,12 @@
 package com.app.entity;
 
-public class Product {
+import java.io.Serializable;
 
-	private long id;
+public class Product implements Serializable {
+
+
+	private static final long serialVersionUID = 1L;
+	private Long id;
 	private String face;
 	private double price;
 	private int size;

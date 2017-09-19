@@ -1,5 +1,6 @@
 package com.app.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 import com.app.entity.PopularPurchases;
 import com.app.entity.Product;
 import com.app.entity.Purchas;
-import com.app.json.JsonUtil;
+import com.app.json.JavaToJson;
 import com.app.scraping.ScrapingInterface;
 
 @Component
@@ -23,48 +24,49 @@ public class ServicePopularPurchasesImpl implements ServicePopularPurchases {
 	private ScrapingInterface scraping;
 
 	@Override
-	//@Cacheable("popular")
+	// @Cacheable("popular")
 	public ArrayList<PopularPurchases> popular() {
-		
-		List<Product> products = scraping.getAllProducts();
 
 		ArrayList<PopularPurchases> popularList = new ArrayList<>();
 
-		for (Product product : products) {
-			popularList.add(
-					new PopularPurchases(product.getId(), product.getFace(), product.getPrice(), product.getSize()));
+		for (Product product : scraping.getAllProducts()) {
+			popularList.add(new PopularPurchases(product));
 		}
 
 		for (PopularPurchases popularPurchases : popularList) {
-			for (Purchas purchas : userService.getAllPurchases()) {
-				if (popularPurchases.getId().equals(purchas.getProductId()))
-					popularPurchases.getRecent().add(purchas.getUsername());
+			try {
+				for (Purchas purchas : userService.getAllPurchases()) {
+					if (popularPurchases.getProduct().getId()==(purchas.getProductId()))
+						popularPurchases.getRecentUserNames().add(purchas.getUsername());
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 
 		Collections.sort(popularList);
 		return popularList;
 	}
-	
+
 	private ArrayList<String> convertJavaObjectToJson(ArrayList<PopularPurchases> list) {
 		ArrayList<String> jsonList = new ArrayList<>();
 		for (PopularPurchases purchas : list) {
-			String jsonFormat = JsonUtil.convertJavaToJSON(purchas);
+			String jsonFormat = JavaToJson.convertJavaToJSON(purchas);
 			jsonList.add(jsonFormat);
 		}
 		return jsonList;
 	}
-	
 
 	@Override
 	@Cacheable("popular")
 	public String popularJson() {
 		ArrayList<PopularPurchases> popularJson = popular();
-		
 		return convertJavaObjectToJson(popularJson).toString();
 	}
+
 	@CacheEvict("popular")
 	public void cacheEvictAccounts() {
-		
+
 	}
 }

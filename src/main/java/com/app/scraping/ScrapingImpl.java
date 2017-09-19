@@ -4,25 +4,22 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 import com.app.entity.Product;
 import com.app.service.ServiceUser;
- 
+
 @Component
-public class ScrapingImpl implements ScrapingInterface  {
+public class ScrapingImpl implements ScrapingInterface {
 	@Autowired
 	private ServiceUser serviceUser;
-	
+
 	@Override
 	public List<Product> getAllProducts() {
 		List<Product> listOfProducts = new ArrayList<>();
 
-		String textObj = getTextProduct();
+		String textObj = getTextProducts();
 		JSONObject obj;
 		try {
 			obj = new JSONObject(textObj);
@@ -44,71 +41,70 @@ public class ScrapingImpl implements ScrapingInterface  {
 
 		return listOfProducts;
 	}
-	
-	
+
 	@Override
-	public String getTextUser()  {
-		String result="";
-         String addres = "http://localhost:8000/api/users";
-         URL pageLoc;
+	public String getTextUsers() {
+		String result = "";
+		String addres = "http://localhost:8000/api/users";
+		URL pageLoc;
 		try {
 			pageLoc = new URL(addres);
-         Scanner scaner = new Scanner(pageLoc.openStream());
+			Scanner scaner = new Scanner(pageLoc.openStream());
 
-         while(scaner.hasNext())
-        	 result+=scaner.next();
-         scaner.close();
-		} catch ( Exception e) {
-			
+			while (scaner.hasNext())
+				result += scaner.next();
+			scaner.close();
+		} catch (Exception e) {
+
 			e.printStackTrace();
 		}
-        
-		
+
 		return result;
 	}
+
 	@Override
-	public String getTextProduct() {
-		String result="";
-        String addres = "http://localhost:8000/api/products";
-        URL pageLoc;
+	public String getTextProducts() {
+		String result = "";
+		String addres = "http://localhost:8000/api/products";
+		URL pageLoc;
 		try {
 			pageLoc = new URL(addres);
-        Scanner scaner = new Scanner(pageLoc.openStream());
+			Scanner scaner = new Scanner(pageLoc.openStream());
 
-        while(scaner.hasNext())
-       	 result+=scaner.next();
-        scaner.close();
-		} catch ( Exception e) {
-			
+			while (scaner.hasNext())
+				result += scaner.next();
+			scaner.close();
+		} catch (Exception e) {
+
 			e.printStackTrace();
 		}
 
 		return result;
-}
+	}
+
 	@Override
 	public String getTextPurchasesByUser() {
-		String result="";
-        ArrayList<String> username=(ArrayList<String>) serviceUser.getUserName();
-        for (int i = 0; i < username.size(); i++) {
-			
-		
-		String addres = "http://localhost:8000/api/purchases/by_user/"+username.get(i);
-        URL pageLoc;
-		try {
-			pageLoc = new URL(addres);
-        Scanner scaner = new Scanner(pageLoc.openStream());
+		String result = "";
+		ArrayList<String> username = (ArrayList<String>) serviceUser.getUserName();
+		for (int i = 0; i < username.size(); i++) {
 
-        while(scaner.hasNext())
-       	 result+=scaner.next();
-        scaner.close();
-		} catch ( Exception e) {
-			
-			e.printStackTrace();
+			String addres = "http://localhost:8000/api/purchases/by_user/" + username.get(i);
+			URL pageLoc;
+			try {
+				pageLoc = new URL(addres);
+				Scanner scaner = new Scanner(pageLoc.openStream());
+
+				while (scaner.hasNext())
+					result += scaner.next();
+				scaner.close();
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
 		}
-        }
-			
+
 		return result;
 
-}
-	 
+	}
+
 }

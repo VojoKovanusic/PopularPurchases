@@ -1,8 +1,11 @@
 package com.app.entity;
 
+import java.io.Serializable;
+
+
 public class Purchas implements Comparable<Purchas> {
 
-	private long id;
+	private Long id;
 	private String username;
 	private long productId;
 	private String date;

@@ -1,5 +1,6 @@
 package com.app.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,13 +8,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+ 
 import com.app.entity.User;
+import com.app.scraping.ScrapingInterface;
 import com.app.service.ServiceOtherUsersWhoRecentlyPurchased;
 import com.app.service.ServicePopularPurchases;
 import com.app.service.ServiceProducts;
 import com.app.service.ServicePurchaBbyProduct;
 import com.app.service.ServicePurchasesByUser;
 import com.app.service.ServiceUser;
+import com.app.json.JsonToJava;
 
 @RestController
 public class Controller {
@@ -30,13 +34,18 @@ public class Controller {
 	private ServicePopularPurchases popularService;
 	@Autowired
 	private ServiceOtherUsersWhoRecentlyPurchased service;
-
-	// fetch 5 recent purchases for the user
+	@Autowired
+	private ScrapingInterface scraping;
+	
+	
+	
+	// fetch 5 recent purchases for the user, oreder by date
+	
 	@RequestMapping(path = "api/purchases/by_user/{username:.+}", method = RequestMethod.GET)
-	public String allPurchases(@PathVariable String username) {
+	public String allPurchases(@PathVariable String username) throws IOException {
 
 		ArrayList<String> listpurchase = servicePurchasesByUser.getPurchasesByUsername(username);
-
+		
 		if (listpurchase.isEmpty())
 			return "User with username of '{{" + username + "}}' was not found";
 		return "{\"purchasesByUser\":" + listpurchase.toString() + "}";
@@ -72,14 +81,7 @@ public class Controller {
 		return "{\"product\":" + serviceProduct.getProduct(id) + "}";
 
 	}
-	// popular products
-	@RequestMapping("api/popular")
-	public  String popular() {
-		return "{\"product\":" + popularService.popularJson().toString()+ "}";
-	}
-
-	//Pomocni controlleri:
-
+	 
 	@RequestMapping(path = "/api/recent_purchases/{username:.+}", method = RequestMethod.GET)
 	public String recentPurchasesByUsername(@PathVariable String username) {
 
@@ -91,12 +93,25 @@ public class Controller {
 	}
 
 	// testini kontroleri:
-	@RequestMapping("api/users")
-	public List<User> getAllUsers() {
-		return serviceUser.getUsers();
+	//DOBAR
+	@RequestMapping("scr/prchases")
+	public String getAllUsers() {
+		return scraping.getTextPurchasesByUser();
+	//	return serviceUser.getUsers();
 
 	}
-
+	// testini kontroleri:
+		@RequestMapping("/prchasesNemanja")
+		public String scrgetAllUsers() throws IOException {
+			String result="";
+			for (User user : serviceUser.getUsers()) {	 
+				result+=new JsonToJava().getPurchasesByName(user.getUsername());
+		}
+			return result;}
+		 
+		 
+		
+				 
 //validacija unosa
 	private boolean isNumber(String id) {
 		char ch[] = id.toCharArray();

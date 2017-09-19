@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import com.app.entity.Product;
-import com.app.json.JsonUtil;
+import com.app.json.JavaToJson;
 import com.app.scraping.ScrapingImpl;
 
 @Service
@@ -27,7 +27,7 @@ public class ServiceProductsImpl implements ServiceProducts {
 		for (Product product : scraping.getAllProducts()) {
 			if (product.getId() == id)
 				
-				return JsonUtil.convertJavaToJSON(product);
+				return JavaToJson.convertJavaToJSON(product);
 		}
 		return "Product with id'{{" + id + "}}' was not found";
 	}

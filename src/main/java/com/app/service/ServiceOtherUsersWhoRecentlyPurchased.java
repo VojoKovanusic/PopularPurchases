@@ -6,7 +6,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import com.app.entity.PopularPurchases;
-import com.app.json.JsonUtil;
+import com.app.json.JavaToJson;
 
 @Component
 public class ServiceOtherUsersWhoRecentlyPurchased {
@@ -27,10 +27,10 @@ public class ServiceOtherUsersWhoRecentlyPurchased {
 
 		for (PopularPurchases objFromAll : all) {
 
-			if (isContainsUsername(objFromAll.getRecent(), username)) {
-				objFromAll.getRecent().remove(username);
+			if (isContainsUsername(objFromAll.getRecentUserNames(), username)) {
+				objFromAll.getRecentUserNames().remove(username);
 				
-				sameProduct.add(JsonUtil.convertJavaToJSON(objFromAll));
+				sameProduct.add(JavaToJson.convertJavaToJSON(objFromAll));
 			}
 		}
 		return sameProduct;

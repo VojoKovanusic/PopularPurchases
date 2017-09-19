@@ -1,80 +1,46 @@
 package com.app.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PopularPurchases implements Comparable<PopularPurchases> {
+public class PopularPurchases implements Comparable<PopularPurchases>, Serializable {
+ 
+	private static final long serialVersionUID = 1L;
+	private Product product;
+	private ArrayList<String> recentUserNames;
 
-	private Long id;
-	private String face;
-	private double price;
-	private int size;
-
-	private ArrayList<String> recent;
-
-	public PopularPurchases(Long id, String face, double price, int size) {
-
-		this.id = id;
-		this.face = face;
-		this.price = price;
-		this.size = size;
-		recent = new ArrayList<>();
+	
+	public PopularPurchases(Product product) {
+	this.product = product;
+	recentUserNames=new ArrayList<>();
 	}
 
-	public PopularPurchases() {
-
+	public Product getProduct() {
+		return product;
 	}
 
-	public Long getId() {
-		return id;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public ArrayList<String> getRecentUserNames() {
+		return recentUserNames;
 	}
 
-	public String getFace() {
-		return face;
-	}
-
-	public void setFace(String face) {
-		this.face = face;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-	public void setSize(int size) {
-		this.size = size;
-	}
-
-	public ArrayList<String> getRecent() {
-		return recent;
-	}
-
-	public void setRecent(ArrayList<String> recent) {
-		this.recent = recent;
-	}
-
-	@Override
-	public String toString() {
-		return "[id=" + id + ", face=" + face + ", price=" + price + ", size=" + size + ", recent="
-				+ recent + "]";
+	public void setRecentUserNames(ArrayList<String> recentUserNames) {
+		this.recentUserNames = recentUserNames;
 	}
 
 	@Override
 	public int compareTo(PopularPurchases o) {
-		Integer recent = getRecent().size();
-		Integer recentNew = o.getRecent().size();
+		Integer recent = getRecentUserNames().size();
+		Integer recentNew = o.getRecentUserNames().size();
 		return recentNew.compareTo(recent);
+	}
+
+	@Override
+	public String toString() {
+		return "PopularPurchases [product=" + product + ", recentUserNames=" + recentUserNames + "]";
 	}
 
 }

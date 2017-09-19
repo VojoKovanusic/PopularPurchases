@@ -15,16 +15,16 @@ public class ServiceUserImpl implements ServiceUser {
 	private ScrapingImpl scraping;
 
 	@Override
-	public List<User> getUsers() {
+	public ArrayList<User> getUsers() {
 
-		List<User> usersList = getFromJSONUserList();
+		ArrayList<User> usersList =  getFromJsonUsers();
 		return usersList;
 	}
 
-	private List<User> getFromJSONUserList() {
+	private ArrayList<User> getFromJsonUsers() {
 
-		List<User> usersList = new ArrayList<>();
-		String textObj = scraping.getTextUser();
+		ArrayList<User> usersList = new ArrayList<>();
+		String textObj = scraping.getTextUsers();
 		JSONObject obj;
 
 		try {
