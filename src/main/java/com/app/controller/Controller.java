@@ -94,9 +94,9 @@ public class Controller {
 
 	// testini kontroleri:
 	//DOBAR
-	@RequestMapping("scr/prchases")
+	@RequestMapping("/popular")
 	public String getAllUsers() {
-		return scraping.getTextPurchasesByUser();
+		return popularService.popularJson();
 	//	return serviceUser.getUsers();
 
 	}

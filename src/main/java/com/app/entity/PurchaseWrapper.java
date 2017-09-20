@@ -5,9 +5,14 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import com.app.entity.Purchas;
 import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
+
+
 public class PurchaseWrapper {
 
 	private Purchas[] purchas;
+	
+	
+	
 	@JsonProperty("purchases")
     public Purchas[] getPurchas ()
     {

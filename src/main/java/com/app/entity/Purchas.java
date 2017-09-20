@@ -1,17 +1,14 @@
 package com.app.entity;
 
-import java.io.Serializable;
-
-
 public class Purchas implements Comparable<Purchas> {
 
-	private Long id;
+	private Long purchasId;
 	private String username;
 	private long productId;
 	private String date;
 
 	public Purchas(long id, String username, long productId, String date) {
-		this.id = id;
+		this.purchasId = id;
 		this.username = username;
 		this.productId = productId;
 		this.date = date;
@@ -22,11 +19,11 @@ public class Purchas implements Comparable<Purchas> {
 	}
 
 	public long getId() {
-		return id;
+		return purchasId;
 	}
 
 	public void setId(long id) {
-		this.id = id;
+		this.purchasId = id;
 	}
 
 	public String getUsername() {
@@ -61,7 +58,7 @@ public class Purchas implements Comparable<Purchas> {
 
 	@Override
 	public String toString() {
-		return "Purchas [id=" + id + ", username=" + username + ", productId=" + productId + ", date=" + date + "]";
+		return "Purchas [id=" + purchasId + ", username=" + username + ", productId=" + productId + ", date=" + date + "]";
 	}
 
 }
